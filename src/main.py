@@ -1,6 +1,5 @@
 # Main Module
-from .documents import get_document
+from .documents import load_document
 
-topic = "retrieval-augmented generation"
-document = get_document(topic)
+document = load_document("data/rag_intro.txt")
 print(document)
