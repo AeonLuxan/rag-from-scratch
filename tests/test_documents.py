@@ -1,6 +1,6 @@
 #Testing
 import unittest
-from src.documents import get_document, load_document
+from src.documents import get_document, load_document, chunk_text
 
 class TestGetDocument(unittest.TestCase):
     def test_returns_information_about_topic(self):
@@ -26,3 +26,24 @@ class TestGetDocument(unittest.TestCase):
     def test_missing_document_raises_error(self):
         with self.assertRaises(FileNotFoundError):
             load_document("data/does_not_exist.txt")
+
+    def test_chunk_text(self):
+        text = "ABCDEFGH"
+        self.assertEqual(chunk_text(text, 2), ["AB", "CD", "EF", "GH"])
+
+    def test_chunk_text_chunk_size_greater_than_text_length(self):
+        text = "ABCDEFGH"
+        self.assertEqual(chunk_text(text, 10), ["ABCDEFGH"])
+
+    def test_chunk_text_empty_string(self):
+        text = ""
+        self.assertEqual(chunk_text(text, 4), [])
+
+    def test_chunk_text_chunk_size_zero(self):
+        text = "ABCDEFGH"
+        with self.assertRaises(ValueError):
+            chunk_text(text, 0)
+
+    def test_chunk_text_negative_chunk_size(self):
+        with self.assertRaises(ValueError):
+            chunk_text("ABCDEFGH", -2)
