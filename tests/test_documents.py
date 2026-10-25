@@ -47,3 +47,17 @@ class TestGetDocument(unittest.TestCase):
     def test_chunk_text_negative_chunk_size(self):
         with self.assertRaises(ValueError):
             chunk_text("ABCDEFGH", -2)
+
+    def test_chunk_text_with_overlap(self):
+        self.assertEqual(
+            chunk_text("ABCDEFGHIJ", 4, 2),
+            ["ABCD", "CDEF", "EFGH", "GHIJ"],
+        )
+
+    def test_chunk_text_overlap_equals_chunk_size(self):
+        with self.assertRaises(ValueError):
+            chunk_text("ABCDEFGH", 4, 4)
+
+    def test_chunk_text_negative_overlap(self):
+        with self.assertRaises(ValueError):
+            chunk_text("ABCDEFGH", 4, -1)
