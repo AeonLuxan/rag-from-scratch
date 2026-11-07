@@ -2,8 +2,9 @@
 from .documents import load_document, chunk_text
 
 document = load_document("data/rag_intro.txt")
-print(document)
-print(chunk_text("ABCDEFGHIJ", 4))
-print(chunk_text("ABC", 10))
-print(chunk_text("", 4))
-print(chunk_text("ABCDEFGHIJ", 4, 2))
+chunks = chunk_text(document, 100, 20)
+
+for i, chunk in enumerate(chunks):
+    print(f"Chunk {i + 1} ({len(chunk)} characters):")
+    print(chunk)
+    print()

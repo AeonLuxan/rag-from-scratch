@@ -61,3 +61,33 @@ class TestGetDocument(unittest.TestCase):
     def test_chunk_text_negative_overlap(self):
         with self.assertRaises(ValueError):
             chunk_text("ABCDEFGH", 4, -1)
+    
+    def test_load__document_with_chunking_and_overlap(self):
+        document = load_document("data/rag_intro.txt")
+        self.assertEqual(
+            chunk_text(document, 100, 20), 
+            [
+                "Retrieval-Augmented Generation (RAG) combines information retrieval with text generation.\nA RAG",
+                "text generation.\nA RAG system searches a collection of documents for relevant passages.\nIt provides",
+                "passages.\nIt provides those passages to a language model as context for answering a question.",
+            ]
+        )
+
+    def test_chunk_text_returns_list(self):
+        document = load_document("data/rag_intro.txt")
+        chunks = chunk_text(document, 100, 20)
+
+        self.assertIsInstance(chunks, list)
+
+    def test_chunk_text_returns_multiple_chunks(self):
+        document = load_document("data/rag_intro.txt")
+        chunks = chunk_text(document, 100, 20)
+
+        self.assertGreater(len(chunks), 1)
+
+    def test_chunk_text_respects_maximum_size(self):
+        document = load_document("data/rag_intro.txt")
+        chunks = chunk_text(document, 100, 20)
+
+        for chunk in chunks:
+            self.assertLessEqual(len(chunk), 100)
